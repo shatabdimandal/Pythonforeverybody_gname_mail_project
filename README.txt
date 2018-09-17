@@ -1,20 +1,30 @@
-# Pythonforeverybody_gname_mail_project
+Analyzing an EMAIL Archive from gmane and vizualizing the data
+using the D3 JavaScript library
 
-Analyzing an EMAIL Archive vizualizing the data using the 
-D3 JavaScript library
+This is a set of tools that allow you to pull down an archive
+of a gmane repository using the instructions at:
 
-Here is a copy of the Sakai Developer Mailing list from 2006-2014.
+http://gmane.org/export.php
+
+In order not to overwhelm the gmane.org server, I have put up 
+my own copy of the messages at: 
 
 http://mbox.dr-chuck.net/
+
+This server will be faster and take a lot of load off the 
+gmane.org server.
 
 You should install the SQLite browser to view and modify the databases from:
 
 http://sqlitebrowser.org/
 
-The base URL is hard-coded in the gmane.py.  Make sure to delete the 
-content.sqlite file if you switch the base url.  The gmane.py file 
-operates as a spider in that it runs slowly and retrieves one mail 
-message per second so as to avoid getting throttled.   It stores all of
+The first step is to spider the gmane repository.  The base URL 
+is hard-coded in the gmane.py and is hard-coded to the Sakai
+developer list.  You can spider another repository by changing that
+base url.   Make sure to delete the content.sqlite file if you 
+switch the base url.  The gmane.py file operates as a spider in 
+that it runs slowly and retrieves one mail message per second so 
+as to avoid getting throttled by gmane.org.   It stores all of
 its data in a database and can be interrupted and re-started 
 as often as needed.   It may take many hours to pull all the data
 down.  So you may need to restart several times.
@@ -22,33 +32,46 @@ down.  So you may need to restart several times.
 To give you a head-start, I have put up 600MB of pre-spidered Sakai 
 email here:
 
-https://online.dr-chuck.com/files/sakai/email/content.sqlite.zip
+https://online.dr-chuck.com/files/sakai/email/content.sqlite
 
-If you download and unzip this, you can "catch up with the 
-latest" by running gmane.py.
+If you download this, you can "catch up with the latest" by
+running gmane.py.
 
 Navigate to the folder where you extracted the gmane.zip
+
+Note: Windows has difficulty in displaying UTF-8 characters
+in the console so for each console window you open, you may need
+to type the following command before running this code:
+
+    chcp 65001
+
+http://stackoverflow.com/questions/388490/unicode-characters-in-windows-command-line-how
 
 Here is a run of gmane.py getting the last five messages of the
 sakai developer list:
 
-Mac: python gmane.py 
+Mac: python3 gmane.py 
 Win: gmane.py 
 
 How many messages:10
+http://mbox.dr-chuck.net/sakai.devel/1/2 2662
+    ggolden@umich.edu 2005-12-08T23:34:30-06:00 call for participation: developers documentation
+http://mbox.dr-chuck.net/sakai.devel/2/3 2434
+    csev@umich.edu 2005-12-09T00:58:01-05:00 report from the austin conference:  sakai developers break into song
+http://mbox.dr-chuck.net/sakai.devel/3/4 3055
+    kevin.carpenter@rsmart.com 2005-12-09T09:01:49-07:00 cas and sakai 1.5
+http://mbox.dr-chuck.net/sakai.devel/4/5 11721
+    michael.feldstein@suny.edu 2005-12-09T09:43:12-05:00 re: lms/vle rants/comments
 http://mbox.dr-chuck.net/sakai.devel/5/6 9443
     john@caret.cam.ac.uk 2005-12-09T13:32:29+00:00 re: lms/vle rants/comments
-http://mbox.dr-chuck.net/sakai.devel/6/7 3586
-    s-githens@northwestern.edu 2005-12-09T13:32:31-06:00 re: sakaiportallogin and presense
-http://mbox.dr-chuck.net/sakai.devel/7/8 10600
-    john@caret.cam.ac.uk 2005-12-09T13:42:24+00:00 re: lms/vle rants/comments
+Does not start with From 
 
 The program scans content.sqlite from 1 up to the first message number not
 already spidered and starts spidering at that message.  It continues spidering
 until it has spidered the desired number of messages or it reaches a page
 that does not appear to be a properly formatted message.
 
-Sometimes there is missing a message.  Perhaps administrators can delete messages
+Sometimes gmane.org is missing a message.  Perhaps administrators can delete messages
 or perhaps they get lost - I don't know.   If your spider stops, and it seems it has hit
 a missing message, go into the SQLite Manager and add a row with the missing id - leave
 all the other fields blank - and then restart gmane.py.   This will unstick the 
@@ -77,7 +100,7 @@ data cleaning process.
 
 Running gmodel.py works as follows:
 
-Mac: python gmodel.py
+Mac: python3 gmodel.py
 Win: gmodel.py
 
 Loaded allsenders 1588 and mapping 28 dns mapping 1
@@ -132,7 +155,7 @@ analysis.   With this file, data analysis will be really quick.
 The first, simplest data analysis is to do a "who does the most" and "which 
 organzation does the most"?  This is done using gbasic.py:
 
-Mac: python gbasic.py 
+Mac: python3 gbasic.py 
 Win: gbasic.py 
 
 How many to dump? 5
@@ -159,7 +182,7 @@ re-run gmodel.py.
 There is a simple vizualization of the word frequence in the subject lines
 in the file gword.py:
 
-Mac: python gword.py
+Mac: python3 gword.py
 Win: gword.py
 
 Range of counts: 33229 129
@@ -171,7 +194,7 @@ gword.htm.
 A second visualization is in gline.py.  It visualizes email participation by 
 organizations over time.
 
-Mac: python gline.py 
+Mac: python3 gline.py 
 Win: gline.py 
 
 Loaded messages= 51330 subjects= 25033 senders= 1584
@@ -201,3 +224,4 @@ As always - comments welcome.
 
 -- Dr. Chuck
 Sun Sep 29 00:11:01 EDT 2013
+
